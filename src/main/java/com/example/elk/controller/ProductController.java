@@ -1,6 +1,5 @@
-package com.example.elk;
+package com.example.elk.controller;
 
-import co.elastic.clients.elasticsearch._types.aggregations.HistogramAggregate;
 import com.example.elk.model.Product;
 import com.example.elk.service.ProductService;
 import lombok.RequiredArgsConstructor;
