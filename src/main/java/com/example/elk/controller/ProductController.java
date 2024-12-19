@@ -1,7 +1,7 @@
 package com.example.elk.controller;
 
 import com.example.elk.model.Product;
-import com.example.elk.service.ProductService;
+import com.example.elk.service.ProductElasticSearchClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,15 +18,15 @@ import java.util.Map;
 @RequestMapping("/product")
 @RequiredArgsConstructor
 public class ProductController {
-    private final ProductService productService;
+    private final ProductElasticSearchClient productElasticSearchClient;
 
     @GetMapping("/{ISIN}")
     public ResponseEntity<List<Product>> getProductByISIN(@PathVariable String ISIN) throws IOException {
-        return new ResponseEntity<>(productService.getProduct(ISIN), HttpStatus.OK);
+        return new ResponseEntity<>(productElasticSearchClient.getProduct(ISIN), HttpStatus.OK);
     }
 
     @GetMapping("/price-histogram")
     public ResponseEntity<Map<Double, Long>> getPriceHistogram() throws IOException {
-        return new ResponseEntity<>(productService.getPriceHistogram(), HttpStatus.OK);
+        return new ResponseEntity<>(productElasticSearchClient.getPriceHistogram(), HttpStatus.OK);
     }
 }
