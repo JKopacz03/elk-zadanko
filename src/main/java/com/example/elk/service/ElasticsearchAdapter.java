@@ -2,6 +2,7 @@ package com.example.elk.service;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.aggregations.HistogramBucket;
+import co.elastic.clients.elasticsearch.core.IndexResponse;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.search.Hit;
 import com.example.elk.model.Product;
@@ -16,12 +17,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @Service
-public class ProductElasticSearchClient {
+@RequiredArgsConstructor
+public class ElasticsearchAdapter {
     private final ElasticsearchClient elasticsearchClient;
-    private final Logger logger = LogManager.getLogger(ProductElasticSearchClient.class);
+    private final Logger logger = LogManager.getLogger(ProductsConsumer.class);
 
+    public void saveOrUpdateProduct(Product product) throws IOException {
+        IndexResponse response = elasticsearchClient.index(i -> i
+                .index("products")
+                .id(product.getISIN())
+                .document(product)
+        );
+        logger.info("Indexed with version {}", response.version());
+    }
 
     public List<Product> getProduct(String ISIN) throws IOException {
         logger.info("Get product by ISIN: {}", ISIN);
